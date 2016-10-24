@@ -9,18 +9,20 @@
 (define spark-line
   (lambda (l)
     (let ((bars (list '▁ '▂ '▃ '▄ '▅ '▆ '▇ '█)))
-      (letrec*
+      (letrec
         ((get-percentage
            (lambda (n)
-             (floor
+             (ceiling
                (/ (* (length bars) n)
                   (apply max l)))))
           (barify
             (lambda (i)
               (nth (- i 1) bars))))
-        (map barify
-             (map (lambda (e)
-                    (if (zero? (get-percentage e))
-                      1
-                      (get-percentage e)))
-                  l))))))
+
+        (letrec ((percentage
+                   (lambda (e)
+                     (if (zero? (get-percentage e))
+                       1
+                       (get-percentage e)))))
+                 (map barify
+                      (map percentage l)))))))
