@@ -1,29 +1,23 @@
-; nth returns the element at position n of a zero-indexed list l
-(define nth
-  (lambda (n l)
-    (if (zero? n)
-      (car l)
-      (nth (- n 1) (cdr l)))))
+(define default-bars '(#\▁ #\▂ #\▃ #\▄ #\▅ #\▆ #\▇ #\█))
 
-; create spark line from list
+; create spark line from list using the bars defined by b
 (define spark-line
+  (lambda (l b)
+    (list->string
+      (map (lambda (index)
+             (list-ref b (- index 1)))
+           (map (lambda (percentage)
+                  (if (or (zero? percentage)
+                          (negative? percentage))
+                    1
+                    percentage))
+                (map
+                  (lambda (number)
+                    (floor-quotient
+                      (* (length b) number)
+                      (apply max l))) l))))))
+
+; spark with default bars
+(define spark
   (lambda (l)
-    (let ((bars '(#\▁ #\▂ #\▃ #\▄ #\▅ #\▆ #\▇ #\█)))
-      (letrec ((get-percentage
-                 (lambda (n)
-                   (ceiling
-                     (/ (* (length bars) n)
-                        (apply max l)))))
-               (barify
-                 (lambda (i)
-                   (nth (- i 1) bars))))
-
-        (letrec ((percentage
-                    (lambda (e)
-                      (if (zero? (get-percentage e))
-                        1
-                        (get-percentage e)))))
-
-            (list->string
-              (map barify
-                   (map percentage l))))))))
+    (spark-line l default-bars)))
