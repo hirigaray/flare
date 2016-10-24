@@ -2,7 +2,7 @@
 
 very simplistic implementation of [spark](https://github.com/holman/spark) in scheme
 
-usage: guile -l main.scm
+usage: `guile -l main.scm` and call `(spark-line '(list-of-numbers))`
 
 # examples
     scheme@(guile-user)> (spark-line '(2 5 5.5 6 10))
