@@ -8,21 +8,22 @@
 ; create spark line from list
 (define spark-line
   (lambda (l)
-    (let ((bars (list '▁ '▂ '▃ '▄ '▅ '▆ '▇ '█)))
-      (letrec
-        ((get-percentage
-           (lambda (n)
-             (ceiling
-               (/ (* (length bars) n)
-                  (apply max l)))))
-          (barify
-            (lambda (i)
-              (nth (- i 1) bars))))
+    (let ((bars '(#\▁ #\▂ #\▃ #\▄ #\▅ #\▆ #\▇ #\█)))
+      (letrec ((get-percentage
+                 (lambda (n)
+                   (ceiling
+                     (/ (* (length bars) n)
+                        (apply max l)))))
+               (barify
+                 (lambda (i)
+                   (nth (- i 1) bars))))
 
         (letrec ((percentage
-                   (lambda (e)
-                     (if (zero? (get-percentage e))
-                       1
-                       (get-percentage e)))))
-                 (map barify
-                      (map percentage l)))))))
+                    (lambda (e)
+                      (if (zero? (get-percentage e))
+                        1
+                        (get-percentage e)))))
+
+            (list->string
+              (map barify
+                   (map percentage l))))))))
