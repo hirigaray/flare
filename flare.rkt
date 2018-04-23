@@ -20,4 +20,4 @@
                         (* (sub1 (length b))
                            number)
                         (apply max l)))))
-         l))
+    l))
